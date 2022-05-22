@@ -9,6 +9,15 @@
 </head>
 <body>
 <div class="container">
+    <?php if ($errors->any()) { ?>
+        <div class="alert alert-danger">
+            <ul>
+                <?php foreach ($errors->all() as $error) { ?>
+                    <li><?php echo $error; ?></li>
+                <?php } ?>
+            </ul>
+        </div>
+    <?php } ?>
     <form action="/categories/<?php echo $category->id?>" method="post" class="mt-4">
         <!--        <input type="hidden" name="_token" value="--><?php //echo csrf_token()?><!--">-->
         <?php echo csrf_field()?>
@@ -21,14 +30,14 @@
                         Name
                     </label>
                     <input type="text" name="name" class="form-control"
-                           value="<?php echo $category->name?>"
+                           value="<?php echo old('name',$category->name)?>"
                            id="name">
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">
                         Description
                     </label>
-                    <textarea name="description" class="form-control"><?php echo $category->description?></textarea>
+                    <textarea name="description" class="form-control"><?php echo old('name',$category->description)?></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">
@@ -43,8 +52,10 @@
                     </label>
                     <select name="parent_id" class="form-control">
                         <option value="">Select Category</option>
-                        <?php foreach ($categories as $category) { ?>
-                            <option value="<?php echo $category->id ?>"><?php echo $category->name?></option>
+                        <?php foreach ($categories as $item) { ?>
+                            <option value="<?php echo $item->id ?>"
+                         <?php echo $category->parent_id == $item->id ? 'selected': '' ?>
+                            ><?php echo $item->name?></option>
                         <?php } ?>
                     </select>
                 </div>

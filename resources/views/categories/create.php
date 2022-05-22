@@ -9,9 +9,21 @@
 </head>
 <body>
 <div class="container">
+    <?php if ($errors->any()) { ?>
+        <div class="alert alert-danger">
+            <ul>
+                <?php foreach ($errors->all() as $error) { ?>
+                    <li><?php echo $error; ?></li>
+                <?php } ?>
+            </ul>
+        </div>
+    <?php } ?>
     <form action="/categories/create" method="post" class="mt-4">
         <!--        <input type="hidden" name="_token" value="--><?php //echo csrf_token()?><!--">-->
-        <?php echo csrf_field()?>
+        <?php echo csrf_field() ?>
+
+
+        <input type="hidden" name="test" value="ffff">
         <div class="row">
             <div class="col-md-3">
                 <div class="mb-3">
@@ -19,13 +31,14 @@
                         Name
                     </label>
                     <input type="text" name="name" class="form-control"
-                           id="name">
+                           id="name" value="<?= old('name') ?>">
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">
                         Description
                     </label>
-                    <textarea name="description" class="form-control"></textarea>
+                    <textarea name="description" class="form-control"><?= old('description') ?>
+                    </textarea>
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">
@@ -41,7 +54,7 @@
                     <select name="parent_id" class="form-control">
                         <option value="">Select Category</option>
                         <?php foreach ($categories as $category) { ?>
-                            <option value="<?php echo $category->id ?>"><?php echo $category->name?></option>
+                            <option value="<?php echo $category->id ?>"><?php echo $category->name ?></option>
                         <?php } ?>
                     </select>
                 </div>
