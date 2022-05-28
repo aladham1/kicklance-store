@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Rules\CheckNameRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -13,20 +14,25 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
+//        $categories = Category::all();
+//        $categories = Category::paginate(10,'*','p');
+        $categories = Category::paginate(10);
         return view('categories.index', ['categories' => $categories]);
     }
 
     public function create()
     {
         $categories = Category::all();
-        return view('categories.create', ['categories' => $categories]);
+        $category = new Category();
+
+
+        return view('categories.create', ['categories' => $categories,
+            'category' => $category]);
     }
 
     public function store(Request $request)
     {
         $request->validate($this->rules());
-
 //        $this->validate($request,[
 //            'name' => 'required|max:200|string',
 //            'description' => ['required', 'max:20', 'string'],
@@ -70,11 +76,11 @@ class CategoryController extends Controller
         //dd($request->except('name','description'));
         Category::create($request->all());
 
-        return redirect('/categories')->with('success', 'Category Added');
+        return redirect()->route('categories.index')->with('success', 'Category Added');
 //        return redirect()->back();
     }
 
-    public function edit($id)
+    public function edit(Category $category)
     {
 //        $category = Category::where('id', $id)->first();
 //        $category = Category::find($id);
@@ -82,16 +88,19 @@ class CategoryController extends Controller
 //            abort(404);
 //        }
 
-        $category = Category::findOrFail($id);
+//        $category = Category::findOrFail($id);
 
-        $categories = Category::where('id', '<>', $id)->get();
-        return view('categories.edit', compact('category', 'categories'));
+
+
+        $categories = Category::where('id', '<>', $category->id)->get();
+        return view('categories.edit',
+            compact('category', 'categories'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
         $request->validate($this->rules());
-        $category = Category::findOrFail($id);
+//        $category = Category::findOrFail($id);
 //        $category->name = $request->name;
 //        $category->description = $request->description;
 //        $category->slug = Str::slug($request->name);
@@ -100,24 +109,35 @@ class CategoryController extends Controller
         $request['slug'] = Str::slug($request->name);
         $category->update($request->all());
 
-        return redirect('/categories')->with('success', 'Category updated');
+//        return redirect('/categories')->with('success', 'Category updated');
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Category updated');
     }
 
-    public function destroy($id)
+    public function destroy(Category $category)
     {
 //        $category = Category::findOrFail($id);
-//        $category->delete();
-        Category::destroy($id);
-        return redirect('/categories')->with('success', 'Category deleted');
+        $category->delete();
+    //    Category::destroy($id);
+        return redirect()->route('categories.index')
+            ->with('success', 'Category deleted');
     }
 
 
     protected function rules()
     {
         return [
-            'name' => 'required|max:200|string|min:2',
+
+            'name' => ['required', 'max:200', new CheckNameRule],
+
+//            'name' => ['required','max:200',function ($attribute, $value, $fail) {
+//                if ($value == "mohammd") {
+//                    $fail("you can not use this name");
+//                }
+//            }],
             'description' => ['required', 'max:20', 'string'],
-            'image' => 'mimes:jpg,bmp,png',
+//            'image' => 'mimes:jpg,bmp,png',
             'parent_id' => 'nullable|exists:categories,id'
         ];
     }
