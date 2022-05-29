@@ -29,13 +29,6 @@
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label">
-                    Image
-                </label>
-                <input type="file" name="image" class="form-control"
-                       id="image">
-            </div>
-            <div class="mb-3">
-                <label for="name" class="form-label">
                     Parent
                 </label>
                 <select name="parent_id" class="form-control">

@@ -23,6 +23,8 @@ Route::group([
     'prefix' => 'dashboard',
 ], function () {
     Route::resource('products', ProductController::class);
+
+
     Route::name('categories.')
         ->controller(CategoryController::class)->group(function () {
             Route::get('categories', 'index')->name('index');

@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->string('image')->nullable();
             $table->string('slug')->unique();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')->references('id')->on('categories')
