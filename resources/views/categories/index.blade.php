@@ -34,9 +34,11 @@ Categories
             <tr>
                 <td>{{$key +1}}</td>
                 <td>{{$category->name}}</td>
-                <td>{{$category->parent_id}}</td>
+                <td>{{$category->parent->name}}</td>
                 <td>{{$category->description}}</td>
                 <td>
+                    <a href="{{route('categories.show',$category->id)}}"
+                       class="btn btn-success">Show</a>
                     <a href="{{route('categories.edit',$category->id)}}"
                        class="btn btn-primary">Edit</a>
                     <form action="{{route('categories.destroy', $category->id)}}" class="d-inline-block" method="post">

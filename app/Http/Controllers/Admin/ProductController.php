@@ -14,10 +14,12 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::leftJoin('categories',
-            'categories.id','=','products.category_id')
-            ->select('products.*','categories.name as category_name')
-            ->get();
+//        $products = Product::leftJoin('categories',
+//            'categories.id','=','products.category_id')
+//            ->select('products.*','categories.name as category_name')
+//            ->get();
+
+        $products = Product::with('category')->get();
         return view('products.index', ['products' => $products]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use App\Rules\CheckNameRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class CategoryController extends Controller
     {
 //        $categories = Category::all();
 //        $categories = Category::paginate(10,'*','p');
-        $categories = Category::paginate(10);
+        $categories = Category::with('parent','children')->paginate(10);
         return view('categories.index', ['categories' => $categories]);
     }
 
@@ -24,10 +25,17 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         $category = new Category();
-
-
         return view('categories.create', ['categories' => $categories,
             'category' => $category]);
+    }
+
+    public function show($id)
+    {
+        $category = Category::with('parent','children')->findOrFail($id);
+//        $products = Product::where('category_id', $id)->get();
+        $products = $category->products;
+        return view('categories.show',['category' => $category,
+            'products' => $products]);
     }
 
     public function store(Request $request)

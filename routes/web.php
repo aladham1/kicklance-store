@@ -1,9 +1,7 @@
 <?php
 
-
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,13 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
-return view('store.index');
+    return view('store.index');
 });
 
 Route::group([
     'prefix' => 'dashboard',
-    'middleware'=>['auth']
+    'middleware' => ['auth','verified'],
 ], function () {
     Route::resource('products', ProductController::class);
 
@@ -32,17 +31,16 @@ Route::group([
         ->controller(CategoryController::class)->group(function () {
             Route::get('categories', 'index')->name('index');
             Route::get('categories/create', 'create')->name('create');
+            Route::get('categories/show/{id}', 'show')->name('show');
             Route::get('categories/{category}/edit', 'edit')->name('edit');
             Route::post('categories/create', 'store')->name('store');
             Route::put('categories/{category}', 'update')->name('update');
             Route::delete('categories/{category}', 'destroy')->name('destroy');
         });
-
 });
-
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

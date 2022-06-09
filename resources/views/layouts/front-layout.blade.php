@@ -57,7 +57,7 @@
         <div class="header-top">
             <div class="container">
                 <div class="header-left d-none d-sm-block">
-                    <p class="top-message text-uppercase">{{$text}}</p>
+                    <p class="top-message text-uppercase">{{$text ?? ''}}</p>
                 </div>
                 <!-- End .header-left -->
 
@@ -172,7 +172,7 @@
                         <h6><span>Call us now</span><a href="tel:#" class="text-dark font1">+123 5678 890</a></h6>
                     </div>
 
-                    <a href="login.html" class="header-icon" title="login"><i class="icon-user-2"></i></a>
+                    <a href="{{route('login')}}" class="header-icon" title="login"><i class="icon-user-2"></i></a>
 
                     <a href="wishlist.html" class="header-icon" title="wishlist"><i class="icon-wishlist-2"></i></a>
 
@@ -502,7 +502,7 @@
                                 <li><a href="#">Shipping & Delivery</a></li>
                                 <li><a href="#">Orders History</a></li>
                                 <li><a href="#">Advanced Search</a></li>
-                                <li><a href="dashboard.html">My Account</a></li>
+                                <li><a href="{{route('login')}}">My Account</a></li>
                                 <li><a href="#">Careers</a></li>
                                 <li><a href="about.html">About Us</a></li>
                                 <li><a href="#">Corporate Sales</a></li>
@@ -757,7 +757,7 @@
         </a>
     </div>
     <div class="sticky-info">
-        <a href="login.html" class="">
+        <a href="{{route('login')}}" class="">
             <i class="icon-user-2"></i>Account
         </a>
     </div>
