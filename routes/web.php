@@ -23,6 +23,7 @@ return view('store.index');
 
 Route::group([
     'prefix' => 'dashboard',
+    'middleware'=>['auth']
 ], function () {
     Route::resource('products', ProductController::class);
 
