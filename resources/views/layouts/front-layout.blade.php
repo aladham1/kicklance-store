@@ -37,6 +37,7 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="{{asset('assets/front/css/demo4.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/front/vendor/fontawesome-free/css/all.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/front/css/main.css')}}">
 </head>
 
 <body>

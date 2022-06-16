@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,7 @@ Route::group([
     'middleware' => ['auth','verified'],
 ], function () {
     Route::resource('products', ProductController::class);
+    Route::resource('users', UserController::class);
 
 
     Route::name('categories.')
