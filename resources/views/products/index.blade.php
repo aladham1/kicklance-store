@@ -32,6 +32,7 @@ Products
                    <th>Quantity</th>
                    <th>Image</th>
                    <th>Category</th>
+                   <th>Tags</th>
                    <th>Action</th>
                </tr>
                </thead>
@@ -48,8 +49,20 @@ Products
                            <img src="{{asset('storage/'.$product->image)}}" width="130" alt="">
                        </td>
 {{--                       <td>{{$product->category ?$product->category->name:''}}</td>--}}
-                       <td>{{$product->category}}</td>
+                       <td>{{$product->category->name}}</td>
+{{--                       @php--}}
+{{--                       $tags = $product->tags()->pluck('name')->toArray()--}}
+{{--                       @endphp--}}
+{{--                       <td>{{implode(',',$tags)}}</td>--}}
                        <td>
+                           @foreach($product->tags as $tag)
+                               <a href="{{route('tags.products', $tag->id)}}">{{$tag->name}}</a>
+                           @endforeach
+
+                       </td>
+                       <td>
+                           <a href="{{route('products.show',$product->id)}}"
+                              class="btn btn-success">Show</a>
                            <a href="{{route('products.edit',$product->id)}}"
                               class="btn btn-primary">Edit</a>
                            <form action="{{route('products.destroy', $product->id)}}" class="d-inline-block" method="post">

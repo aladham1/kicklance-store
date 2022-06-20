@@ -7,7 +7,7 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <x-auth-session-status class="mb-4" :status="session('status')"/>
-                    <x-auth-validation-errors class="mb-4" :errors="$errors"/>
+                    <x-auth-validation-errors class="" :errors="$errors"/>
                     <form method="POST" action="{{ route('login') }}" class="auth-form">
                     @csrf
                         <div>

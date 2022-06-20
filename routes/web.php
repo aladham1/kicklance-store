@@ -27,6 +27,8 @@ Route::group([
 ], function () {
     Route::resource('products', ProductController::class);
     Route::resource('users', UserController::class);
+    Route::get('tags-products/{id}', [ProductController::class,'tags'])
+        ->name('tags.products');
 
 
     Route::name('categories.')
