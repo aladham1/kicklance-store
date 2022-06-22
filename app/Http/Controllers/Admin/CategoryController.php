@@ -13,12 +13,28 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-//        $categories = Category::all();
+
+//        $parentCategories = Category::whereNull('parent_id')->get();
+        $parentCategories = Category::all();
 //        $categories = Category::paginate(10,'*','p');
-        $categories = Category::with('parent','children')->paginate(10);
-        return view('categories.index', ['categories' => $categories]);
+        $categories = Category::when($request->name, function ($query, $value){
+            $query->where("name","LIKE","%$value%");
+        })->when($request->parent_id, function ($query, $value){
+            $query->where('parent_id', $value);
+        })->with('parent','children')->paginate(10);
+
+//        $categories = Category::query();
+//        if ($request->name){
+//            $categories = $categories->where("name", "like", $request->name);
+//        }
+//        if ($request->parent_id){
+//            $categories = $categories->where("parent_id", $request->parent_id);
+//        }
+//        $categories = $categories->paginate(10);
+        return view('categories.index', ['categories' => $categories,
+            'parentCategories' => $parentCategories]);
     }
 
     public function create()

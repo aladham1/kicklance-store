@@ -128,6 +128,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
                     <li class="nav-item menu-open">
+                        <a href="{{route('store')}}" class="nav-link">
+                            <i class="nav-icon fas fa-check"></i>
+                            <p>
+                                Website
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item menu-open">
                         <a href="{{route('users.index')}}" class="nav-link active">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
@@ -209,6 +217,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Bootstrap 4 -->
 <script src="{{asset('assets/dashboard/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
+
+@yield('js_page')
 <script src="{{asset('assets/dashboard/js/adminlte.min.js')}}"></script>
 </body>
 </html>

@@ -19,13 +19,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('store.index');
-});
+})->name('store');
 
 Route::group([
     'prefix' => 'dashboard',
     'middleware' => ['auth','verified'],
 ], function () {
     Route::resource('products', ProductController::class);
+    Route::delete('products/image/{id}', [ProductController::class,'destroyImage'])
+        ->name('products.images.destroy');
     Route::resource('users', UserController::class);
     Route::get('tags-products/{id}', [ProductController::class,'tags'])
         ->name('tags.products');

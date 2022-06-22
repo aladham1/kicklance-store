@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class ProductController extends Controller
 //            'categories.id','=','products.category_id')
 //            ->select('products.*','categories.name as category_name')
 //            ->get();
-        $products = Product::with('category','tags')->get();
+        $products = Product::with('category', 'tags')->get();
         return view('products.index', ['products' => $products]);
     }
 
@@ -29,45 +30,51 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $product = new Product();
+        $tags = Tag::pluck('name')->toArray();
 
         return view('products.create', ['categories' => $categories
-            , 'product' => $product]);
+            , 'product' => $product, 'tags' => $tags]);
     }
 
 
     public function store(Request $request)
     {
-
         $request->validate($this->rules());
 
-        $image = $request->file('image');
+        $mainImage = $request->file('main_image');
         $data = $request->all();
-        if ($request->hasFile('image')) {
-            if ($image->isValid()) {
-//           $imageName = $image->getClientOriginalName();
-//           $imageExt = $image->getClientOriginalExtension();
-//          $image->storeAs('products','mm.png','public');
-
-                $image_url = $image->store('products', 'public');
-                $data['image'] = $image_url;
-
+        if ($request->hasFile('main_image')) {
+            if ($mainImage->isValid()) {
+                $mainImageUrl = $mainImage->store('products', 'public');
+                $data['image'] = $mainImageUrl;
             }
         }
         $product = Product::create($data);
+        $images = $request->file('images');
+        foreach ($images as $image){
+            if ($image->isValid()) {
+                $imageUrl = $image->store('products', 'public');
+                $product->images()->create([
+                    'path_image' => $imageUrl
+                ]);
+            }
+        }
+
+
         if ($request->tags) {
             $tagIds = [];
-            $tags = explode(',', $request->tags);
-           foreach ($tags as $item) {
-                $tag = Tag::where('name', $item)->first();
-               if (!$tag) {
+            $tags = json_decode($request->tags);
+            foreach ($tags as $item) {
+                $tag = Tag::where('name', $item->value)->first();
+                if (!$tag) {
                     $tag = Tag::create([
-                        'name' => $item,
-                       'slug' => Str::slug($item)
-                   ]);
-               }
-               $tagIds[] = $tag->id;
-           }
-           $product->tags()->attach($tagIds);
+                        'name' => $item->value,
+                        'slug' => Str::slug($item->value)
+                    ]);
+                }
+                $tagIds[] = $tag->id;
+            }
+            $product->tags()->attach($tagIds);
         }
 
 //        tag_id, product_id
@@ -84,7 +91,8 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        return view('products.show', ['product' => $product]);
+        return view('products.show', ['product' =>
+            $product->load('tags','category','images')]);
     }
 
 
@@ -149,13 +157,21 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('success', 'Product deleted');
     }
+    public function destroyImage($id)
+    {
+        $image = ProductImage::findOrFail($id);
+        $image->delete();
+        Storage::disk('public')->delete($image->path_image);
+        return redirect()->route('products.show', $image->product->id)
+            ->with('success', 'Image deleted');
+    }
 
     protected function rules()
     {
         return [
             'title' => ['required', 'max:200'],
             'description' => ['required', 'string'],
-            'image' => 'nullable|mimes:jpg,bmp,png',
+            'main_image' => 'nullable|mimes:jpg,png',
             'category_id' => 'required|exists:categories,id',
             'cost' => 'required|numeric',
             'price' => 'required|numeric',

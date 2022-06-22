@@ -8,7 +8,7 @@
 
 
 @section('page_title')
-Categories
+    Categories
 @endsection
 
 @section('content')
@@ -18,7 +18,19 @@ Categories
         </div>
     </div>
 
-    <x-flash-message />
+    <form action="{{route('categories.index')}}" class="d-flex mb-3">
+        <input type="text" name="name" placeholder="Search By name"
+               class="form-control mr-3">
+        <select name="parent_id" id="parent_id" class="form-control mr-3">
+            <option value="">Select Category</option>
+            @foreach($parentCategories as $parent)
+                <option value="{{$parent->id}}">{{$parent->name}}</option>
+            @endforeach
+        </select>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    <x-flash-message/>
     <table class="table">
         <thead>
         <tr>
@@ -53,7 +65,7 @@ Categories
         </tbody>
 
     </table>
-{{$categories->links()}}
+    {{$categories->links()}}
 @endsection
 
 
