@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
+
+    protected $guard = 'web';
+
+    public function __construct(Request $request)
+    {
+        if ($request->is('admin/*')) {
+            $this->guard = 'admin';
+        }
+    }
+
     /**
      * Display the login view.
      *
@@ -17,18 +27,28 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        return view('auth.login');
+        $prefix = '';
+        if ($this->guard == 'admin') {
+            $prefix = 'admin.';
+        }
+        return view('auth.login', [
+            'prefix' => $prefix,
+        ]);
+//        return view('auth.login',[
+//            'prefix' => $this->guard == 'admin' ? 'admin.' : '',
+//
+//        ]);
     }
 
     /**
      * Handle an incoming authentication request.
      *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
+     * @param \App\Http\Requests\Auth\LoginRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
+        $request->authenticate($this->guard);
 
         $request->session()->regenerate();
 
@@ -38,7 +58,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request)

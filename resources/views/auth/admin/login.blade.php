@@ -3,14 +3,14 @@
         <!-- Session Status -->
 
         <div class="container login-container">
+
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
+                    <h3>Admin Login</h3>
                     <x-auth-session-status class="mb-4" :status="session('status')"/>
                     <x-auth-validation-errors class="" :errors="$errors"/>
-                    <form method="POST"
-                  action="{{ route($prefix.'login') }}"
-                          class="auth-form">
+                    <form method="POST" action="{{ route('admin.login') }}" class="auth-form">
                     @csrf
                         <div>
                             <x-label for="password" class=""
