@@ -15,8 +15,14 @@ use Illuminate\Support\Str;
 class ProductController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->authorizeResource(Product::class);
+    }
+
     public function index()
     {
+//        $this->authorize('view-any', Product::class);
 //        $products = Product::leftJoin('categories',
 //            'categories.id','=','products.category_id')
 //            ->select('products.*','categories.name as category_name')

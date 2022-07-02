@@ -136,10 +136,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                     </li>
                     <li class="nav-item menu-open">
-                        <a href="{{route('users.index')}}" class="nav-link active">
+                        <a href="{{route('users.index')}}" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Users
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item menu-open">
+                        <a href="{{route('roles.index')}}" class="nav-link">
+                            <i class="nav-icon fas fa-user"></i>
+                            <p>
+                                Roles
                             </p>
                         </a>
                     </li>

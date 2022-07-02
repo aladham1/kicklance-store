@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Rules\CheckNameRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -15,30 +16,36 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
+//        if (!Gate::allows('categories.view')) {
+//            abort(403);
+//        }
 
-//        $parentCategories = Category::whereNull('parent_id')->get();
+        $this->authorize('view-any', Category::class);
+
         $parentCategories = Category::all();
-//        $categories = Category::paginate(10,'*','p');
-        $categories = Category::when($request->name, function ($query, $value){
-            $query->where("name","LIKE","%$value%");
-        })->when($request->parent_id, function ($query, $value){
-            $query->where('parent_id', $value);
-        })->with('parent','children')->paginate(10);
 
-//        $categories = Category::query();
-//        if ($request->name){
-//            $categories = $categories->where("name", "like", $request->name);
-//        }
-//        if ($request->parent_id){
-//            $categories = $categories->where("parent_id", $request->parent_id);
-//        }
-//        $categories = $categories->paginate(10);
+        $categories = Category::when($request->name, function ($query, $value) {
+            $query->where("name", "LIKE", "%$value%");
+        })->when($request->parent_id, function ($query, $value) {
+            $query->where('parent_id', $value);
+        })->with('parent', 'children')->paginate(10);
+
         return view('categories.index', ['categories' => $categories,
             'parentCategories' => $parentCategories]);
     }
 
+    public function getTrashed()
+    {
+        $categories = Category::onlyTrashed()->paginate();
+        return view('categories.trash', ['categories' => $categories]);
+    }
+
     public function create()
     {
+        $this->authorize('create', Category::class);
+//        if (Gate::denies('categories.create')){
+//            abort(403);
+//        }
         $categories = Category::all();
         $category = new Category();
         return view('categories.create', ['categories' => $categories,
@@ -47,10 +54,12 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-        $category = Category::with('parent','children')->findOrFail($id);
+        $category = Category::with('parent', 'children')->findOrFail($id);
 //        $products = Product::where('category_id', $id)->get();
+        $this->authorize('view', $category);
+
         $products = $category->products;
-        return view('categories.show',['category' => $category,
+        return view('categories.show', ['category' => $category,
             'products' => $products]);
     }
 
@@ -106,6 +115,8 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
+
+//        Gate::authorize('categories.update');
 //        $category = Category::where('id', $id)->first();
 //        $category = Category::find($id);
 //        if (!$category){
@@ -113,7 +124,6 @@ class CategoryController extends Controller
 //        }
 
 //        $category = Category::findOrFail($id);
-
 
 
         $categories = Category::where('id', '<>', $category->id)->get();
@@ -143,7 +153,7 @@ class CategoryController extends Controller
     {
 //        $category = Category::findOrFail($id);
         $category->delete();
-    //    Category::destroy($id);
+        //    Category::destroy($id);
         return redirect()->route('categories.index')
             ->with('success', 'Category deleted');
     }

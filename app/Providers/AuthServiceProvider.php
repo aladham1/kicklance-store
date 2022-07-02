@@ -25,6 +25,30 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+//        Gate::before(function ($user, $ability) {
+//            if ($user->id == 9) {
+//                return true;
+//            }
+//        });
+//
+//        Gate::define('categories.view', function ($user) {
+////            if ($user->type == "super-admin"){
+////                return true;
+////            }
+//
+//            return true;
+//        });
+//
+//        Gate::define('categories.create', function ($user) {
+//            if ($user->type == "super-admin") {
+//                return true;
+//            }
+//        });
+//
+//        Gate::define('categories.update', function ($user) {
+//            if ($user->type == "super-admin") {
+//                return true;
+//            }
+//        });
     }
 }

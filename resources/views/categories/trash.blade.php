@@ -22,22 +22,10 @@
         @can('create', \App\Models\Category::class)
             <div class="col-12">
                 <a href="{{route('categories.create')}}" class="btn btn-primary">New Category</a>
-                <a href="{{route('categories.trashed')}}" class="btn btn-danger">Deleted categories</a>
             </div>
         @endcan
     </div>
 
-    <form action="{{route('categories.index')}}" class="d-flex mb-3">
-        <input type="text" name="name" placeholder="Search By name"
-               class="form-control mr-3">
-        <select name="parent_id" id="parent_id" class="form-control mr-3">
-            <option value="">Select Category</option>
-            @foreach($parentCategories as $parent)
-                <option value="{{$parent->id}}">{{$parent->name}}</option>
-            @endforeach
-        </select>
-        <button type="submit" class="btn btn-primary">Filter</button>
-    </form>
 
     <x-flash-message/>
     <table class="table">

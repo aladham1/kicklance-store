@@ -9,7 +9,7 @@
                     <x-auth-session-status class="mb-4" :status="session('status')"/>
                     <x-auth-validation-errors class="" :errors="$errors"/>
                     <form method="POST"
-                  action="{{ route($prefix.'login') }}"
+                  action="{{ route('login') }}"
                           class="auth-form">
                     @csrf
                         <div>
