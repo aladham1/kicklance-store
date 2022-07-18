@@ -13,8 +13,14 @@ class UserController extends Controller
 {
     public function index()
     {
+//        return view('dashboard.users.index', ['users' =>
+//            User::with('profile')
+//                ->withoutGlobalScope('actove')
+//                ->get()]);
         return view('dashboard.users.index', ['users' =>
-            User::with('profile')->get()]);
+            User::with('profile')
+                ->active()
+                ->get()]);
     }
 
     public function create()

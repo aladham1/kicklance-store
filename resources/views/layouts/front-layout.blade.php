@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="{{asset('assets/front/css/bootstrap.min.css')}}">
 
     <!-- Main CSS File -->
+    <link rel="stylesheet" href="{{asset('assets/front/css/style.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/front/css/demo4.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/front/vendor/fontawesome-free/css/all.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/front/css/main.css')}}">
@@ -127,7 +128,7 @@
                     <button class="mobile-menu-toggler text-primary mr-2" type="button">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <a href="demo4.html" class="logo">
+                    <a href="{{route('store')}}" class="logo">
                         <img src="{{asset('assets/front/images/logo.png')}}" width="111" height="44" alt="Porto Logo">
                     </a>
                 </div>
@@ -268,7 +269,7 @@
                                 <!-- End .dropdown-cart-total -->
 
                                 <div class="dropdown-cart-action">
-                                    <a href="cart.html" class="btn btn-gray btn-block view-cart">View
+                                    <a href="{{route('cart')}}" class="btn btn-gray btn-block view-cart">View
                                         Cart</a>
                                     <a href="checkout.html" class="btn btn-dark btn-block">Checkout</a>
                                 </div>
@@ -291,7 +292,7 @@
                 <nav class="main-nav w-100">
                     <ul class="menu">
                         <li class="active">
-                            <a href="demo4.html">Home</a>
+                            <a href="{{route('store')}}">Home</a>
                         </li>
                         <li>
                             <a href="category.html">Categories</a>

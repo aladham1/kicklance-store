@@ -34,7 +34,7 @@ class ProductPolicy
      */
     public function view(User $user, Product $product)
     {
-        //
+      return  $user->hasAbilities('products.show');
     }
 
     /**
@@ -45,7 +45,7 @@ class ProductPolicy
      */
     public function create(User $user)
     {
-        //
+        return  $user->hasAbilities('products.create');
     }
 
     /**
@@ -57,7 +57,7 @@ class ProductPolicy
      */
     public function update(User $user, Product $product)
     {
-        //
+        return  $user->hasAbilities('products.update');
     }
 
     /**
@@ -69,7 +69,7 @@ class ProductPolicy
      */
     public function delete(User $user, Product $product)
     {
-        //
+        return  $user->hasAbilities('products.delete');
     }
 
     /**

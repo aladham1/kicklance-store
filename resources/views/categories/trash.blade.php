@@ -8,7 +8,7 @@
 
 
 @section('page_title')
-    Categories
+    Deleted Categories
 @endsection
 
 @section('content')
@@ -46,11 +46,13 @@
                 <td>{{$category->parent->name}}</td>
                 <td>{{$category->description}}</td>
                 <td>
-                    <a href="{{route('categories.show',$category->id)}}"
-                       class="btn btn-success">Show</a>
-                    <a href="{{route('categories.edit',$category->id)}}"
-                       class="btn btn-primary">Edit</a>
-                    <form action="{{route('categories.destroy', $category->id)}}" class="d-inline-block" method="post">
+                    <form action="{{route('categories.restore', $category->id)}}"
+                          class="d-inline-block" method="post">
+                        @csrf
+                        @method('PUT')
+                        <button class="btn btn-warning">Restore</button>
+                    </form>
+                    <form action="{{route('categories.force_delete', $category->id)}}" class="d-inline-block" method="post">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-danger">Delete</button>

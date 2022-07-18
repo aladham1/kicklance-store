@@ -45,6 +45,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate($this->rules());
 
         $mainImage = $request->file('main_image');
@@ -56,7 +57,7 @@ class ProductController extends Controller
             }
         }
         $product = Product::create($data);
-        $images = $request->file('images');
+        $images = $request->file('images',[]);
         foreach ($images as $image){
             if ($image->isValid()) {
                 $imageUrl = $image->store('products', 'public');
@@ -159,7 +160,9 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        Storage::disk('public')->delete($product->image);
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
         return redirect()->route('products.index')
             ->with('success', 'Product deleted');
     }

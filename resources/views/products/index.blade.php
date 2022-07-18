@@ -46,7 +46,7 @@ Products
                        <td>{{$product->sale_price ?? 0}}</td>
                        <td>{{$product->quantity}}</td>
                        <td>
-                           <img src="{{asset('storage/'.$product->image)}}" width="130" alt="">
+                           <img src="{{$product->image_url}}" width="130" alt="">
                        </td>
 {{--                       <td>{{$product->category ?$product->category->name:''}}</td>--}}
                        <td>{{$product->category->name}}</td>

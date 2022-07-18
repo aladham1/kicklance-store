@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Rules\CheckNameRule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -19,6 +20,7 @@ class CategoryController extends Controller
 //        if (!Gate::allows('categories.view')) {
 //            abort(403);
 //        }
+
 
         $this->authorize('view-any', Category::class);
 
@@ -158,6 +160,23 @@ class CategoryController extends Controller
             ->with('success', 'Category deleted');
     }
 
+
+    public function forceDeleteCategory($id)
+    {
+        $category = Category::onlyTrashed()->find($id);
+        $category->forceDelete();
+
+        return redirect()->route('categories.trashed')
+            ->with('success', 'Category deleted for ever');
+    }
+
+    public function restoreCategory($id)
+    {
+        $category = Category::onlyTrashed()->find($id);
+        $category->restore();
+        return redirect()->route('categories.index')
+            ->with('success', 'Category restore');
+    }
 
     protected function rules()
     {

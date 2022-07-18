@@ -19,8 +19,8 @@ class CheckUserType
     {
 
         if (Auth::user()->type != 'admin'){
-//            return redirect()->route('store');
-          //  abort(403);
+            return redirect()->route('store');
+//            abort(403);
         }
         return $next($request);
     }

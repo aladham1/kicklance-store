@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Scopes\ActiveScope;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -43,6 +45,21 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+
+    // Global Scope
+    protected static function booted()
+    {
+//        static::addGlobalScope('active',function (Builder $builder){
+//            $builder->where('status','active');
+//        });
+
+        static::addGlobalScope(new ActiveScope());
+    }
+
+
+    public function scopeActive($query){
+        return $query->where('status', 'active');
+    }
 
     public function profile()
     {

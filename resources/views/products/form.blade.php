@@ -72,6 +72,14 @@
         </div>
     </div>
 </div>
+<div class="form-group">
+    <div class="form-check">
+        <input class="form-check-input" id="featured"
+               {{$product->featured ?'checked':''}}
+               type="checkbox" name="featured" value="1">
+        <label class="form-check-label" for="featured">Featured</label>
+    </div>
+</div>
 {{--<div class="form-group">--}}
 {{--    @foreach($tags as $tag)--}}
 {{--        <div class="form-check">--}}
@@ -84,10 +92,10 @@
 
 <div class="form-group">
     <label for="tags">Tags</label>
-{{--    <input type="text" name="tags" class="form-control"--}}
-{{--           value="{{$tags??''}}"--}}
-{{--           id="tags"--}}
-{{--           placeholder="Enter tags">--}}
+    {{--    <input type="text" name="tags" class="form-control"--}}
+    {{--           value="{{$tags??''}}"--}}
+    {{--           id="tags"--}}
+    {{--           placeholder="Enter tags">--}}
     <input name="tags" placeholder="write some tags" value="">
 </div>
 
